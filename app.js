@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const fs = this.request('fs');
+const fs = require('fs');
 
 const app = express();
 
