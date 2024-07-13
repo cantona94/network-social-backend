@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const Jdenticon = require('jdenticon');
+const jwt = require('jsonwebtoken');
 const { prisma } = require('../prisma/prisma-client');
 
 const UserController = {
@@ -37,6 +38,35 @@ const UserController = {
       res.json(user);
     } catch (error) {
       console.error('Error in register:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+
+  login: async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Все поля обязательны' });
+    }
+
+    try {
+      const user = await prisma.user.findUnique({ where: { email } });
+
+      if (!user) {
+        return res.status(400).json({ error: 'Неверный логин или пароль' });
+      }
+
+      const valid = await bcrypt.compare(password, user.password);
+
+      if (!valid) {
+        return res.status(400).json({ error: 'Неверный логин или пароль' });
+      }
+
+      const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY);
+
+      res.json({ token });
+    } catch (error) {
+      console.error('Error in login:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   },
