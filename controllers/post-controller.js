@@ -3,7 +3,6 @@ const { prisma } = require('../prisma/prisma-client');
 const PostController = {
   createPost: async (req, res) => {
     const { content } = req.body;
-
     const authorId = req.user.userId;
 
     if (!content) {
@@ -20,8 +19,8 @@ const PostController = {
 
       res.json(post);
     } catch (error) {
-      console.error('Error in createPost:', error);
-      res.status(500).json({ error: 'There was an error creating the post' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
@@ -47,7 +46,8 @@ const PostController = {
 
       res.json(postsWithLikeInfo);
     } catch (err) {
-      res.status(500).json({ error: 'Произошла ошибка при получении постов' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
@@ -80,7 +80,8 @@ const PostController = {
 
       res.json(postWithLikeInfo);
     } catch (error) {
-      res.status(500).json({ error: 'Произошла ошибка при получении поста' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
@@ -106,7 +107,8 @@ const PostController = {
 
       res.json(transaction);
     } catch (error) {
-      res.status(500).json({ error: 'Что-то пошло не так' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 };

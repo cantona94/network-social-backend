@@ -15,6 +15,7 @@ const UserController = {
 
     try {
       const existingUser = await prisma.user.findUnique({ where: { email } });
+
       if (existingUser) {
         return res.status(400).json({ error: 'Пользователь уже существует' });
       }
@@ -37,8 +38,8 @@ const UserController = {
 
       res.json(user);
     } catch (error) {
-      console.error('Error in register:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
@@ -66,8 +67,8 @@ const UserController = {
 
       res.json({ token });
     } catch (error) {
-      console.error('Error in login:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
@@ -96,7 +97,8 @@ const UserController = {
 
       res.json({ ...user, isFollowing: Boolean(isFollowing) });
     } catch (error) {
-      res.status(500).json({ error: 'Что-то пошло не так' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
@@ -139,7 +141,7 @@ const UserController = {
       res.json(user);
     } catch (error) {
       console.log('error', error);
-      res.status(500).json({ error: 'Что-то пошло не так' });
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
@@ -167,8 +169,8 @@ const UserController = {
 
       return res.status(200).json(user);
     } catch (error) {
-      console.log('err', error);
-      res.status(500).json({ error: 'Что-то пошло не так' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 };

@@ -3,7 +3,6 @@ const { prisma } = require('../prisma/prisma-client');
 const LikeController = {
   likePost: async (req, res) => {
     const { postId } = req.body;
-
     const userId = req.user.userId;
 
     if (!postId) {
@@ -35,18 +34,14 @@ const LikeController = {
 
       res.json(like);
     } catch (error) {
-      res.status(500).json({ error: 'Что-то пошло не так' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
   unlikePost: async (req, res) => {
     const { id } = req.params;
-
     const userId = req.user.userId;
-
-    if (!id) {
-      return res.status(400).json({ error: 'Параметры не переданы' });
-    }
 
     try {
       const existingLike = await prisma.like.findFirst({
@@ -65,7 +60,8 @@ const LikeController = {
 
       res.json(like);
     } catch (error) {
-      res.status(500).json({ error: 'Что-то пошло не так' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 };

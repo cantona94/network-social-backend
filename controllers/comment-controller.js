@@ -2,14 +2,14 @@ const { prisma } = require('../prisma/prisma-client');
 
 const CommentController = {
   createComment: async (req, res) => {
+    const { postId, content } = req.body;
+    const userId = req.user.userId;
+
+    if (!postId || !content) {
+      return res.status(400).json({ error: 'Все поля обязательны' });
+    }
+
     try {
-      const { postId, content } = req.body;
-      const userId = req.user.userId;
-
-      if (!postId || !content) {
-        return res.status(400).json({ error: 'Все поля обязательны' });
-      }
-
       const comment = await prisma.comment.create({
         data: {
           postId,
@@ -20,16 +20,16 @@ const CommentController = {
 
       res.json(comment);
     } catch (error) {
-      console.error('Error creating comment:', error);
-      res.status(500).json({ error: 'Не удалось создать комментарий' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 
   deleteComment: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const userId = req.user.userId;
+    const { id } = req.params;
+    const userId = req.user.userId;
 
+    try {
       const comment = await prisma.comment.findUnique({ where: { id } });
 
       if (!comment) {
@@ -46,8 +46,8 @@ const CommentController = {
 
       res.json(comment);
     } catch (error) {
-      console.error('Error deleting comment:', error);
-      res.status(500).json({ error: 'Не удалось удалить комментарий' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
 };
